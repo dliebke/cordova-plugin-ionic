@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-ionic",
-  "version": "5.3.0",
+  "version": "5.4.7",
   "cordova": {
     "id": "cordova-plugin-ionic",
     "platforms": [
@@ -8,40 +8,23 @@
       "ios"
     ]
   },
-  "types": "types/IonicCordova.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "description": "Ionic Cordova SDK",
-  "engines": {
-    "cordovaDependencies": {
-      ">5.0.0": {
-        "cordova-plugin-splashscreen": ">=5.0.1",
-        "cordova-plugin-file": ">=6.0.1",
-        "cordova-plugin-webview": ">=2.1.0"
-      },
-      "4.1.7": {
-        "cordova-plugin-splashscreen": ">=5.0.1"
-      },
-      "3.1.3": {
-        "cordova-plugin-splashscreen": ">=5.0.1"
-      },
-      "2.0.4": {
-        "cordova-plugin-splashscreen": ">=4.0.0"
-      }
-    }
-  },
   "scripts": {
-    "apply-dev": "npm run build && ./apply-changes.sh",
-    "create-dev": "./create-local-app.sh",
+    "apply-dev": "npm run build && ./scripts/apply-changes.sh",
+    "create-dev": "./scripts/create-local-app.sh",
     "clean": "rimraf dist",
     "lint": "tslint --config tslint.json --project tsconfig.json",
     "precommit": "npm run lint",
     "watch": "tsc -w",
     "watch-dev": "watch 'npm run apply-dev' ./www",
-    "build": "npm run clean && tsc",
+    "build": "npm run clean && tsc && ngc -p tsconfig.ng.json && ./scripts/ng-prepare.sh",
     "sync-plugin-xml": "sync-cordova-xml2 package.json plugin.xml --output=plugin.xml",
-    "version": "npm run sync-plugin-xml && git add plugin.xml && ./update-plugin-version-code.sh",
+    "version": "npm run sync-plugin-xml && git add plugin.xml && ./scripts/update-plugin-version-code.sh",
     "prepublishOnly": "npm run build",
     "test": "echo 'We should really get unit tests running'",
-    "release": "npm run build && np",
+    "release": "npm run build && np --any-branch",
     "docs": "./scripts/docs.sh"
   },
   "repository": "https://github.com/ionic-team/cordova-plugin-ionic.git",
@@ -60,13 +43,6 @@
     "cordova-android",
     "cordova-ios"
   ],
-  "dependencies": {
-    "@types/cordova-plugin-file-transfer": "^1.6.2",
-    "mkpath": ">=1.0.0",
-    "node-version-compare": ">=1.0.1",
-    "plist": ">=1.2.0",
-    "xml2js": ">=0.4"
-  },
   "author": "Ionic",
   "contributors": [
     {
@@ -80,8 +56,10 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@angular/compiler": "^9.1.1",
+    "@angular/compiler-cli": "^9.1.1",
+    "@angular/core": "^7.2.15",
     "@types/cordova": "0.0.34",
-    "cordova-plugin-file": "^6.0.1",
     "jest": "^22.4.3",
     "np": "^3.0.4",
     "rimraf": "^2.6.2",
@@ -91,7 +69,6 @@
     "tslint-ionic-rules": "0.0.14",
     "typedoc": "^0.11.1",
     "typedoc-plugin-markdown": "^1.1.6",
-    "typescript": "^2.6.2",
     "watch": "^1.0.2"
   },
   "jest": {
@@ -108,5 +85,8 @@
       ".(ts)": "./node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "tests/.*\\.(ts|js)$"
+  },
+  "dependencies": {
+    "typescript": "^3.5.3"
   }
 }
